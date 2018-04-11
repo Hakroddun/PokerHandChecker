@@ -6,7 +6,9 @@ public class PokerHandChecker
 {
     private String hand = "High Card";
     private boolean isStraight = false;
+    private boolean isRoyalStraight = false;
     private boolean isFlush = false;
+    private boolean hasFourOfAKind = false;
     private boolean hasThreeOfAKind = false;
     private int numberOfPairs = 0;
     private Map<Integer, Integer> numberOfCardRanks = new TreeMap<>();
@@ -16,7 +18,7 @@ public class PokerHandChecker
      * This method is used to return the best hand possible from the cards given.
      * @return hand - the best hand possible with the cards supplied.
      */
-    public String BestHand()
+    public String getHand()
     {
         return hand;
     }
@@ -28,15 +30,31 @@ public class PokerHandChecker
     public void checkHand(String[] cards)
     {
         sortCardsIntoRankAndSuitMaps(cards);
-        checkAggregatedValuesOfRanks();
+        checkSummedValuesOfRanks();
         checkIfStraight();
         checkIfFlush();
 
-        if(isFlush)
+        if(isRoyalStraight && isFlush)
         {
-            hand = "Straight";
+            hand = "Royal Flush";
         }
-        else if(isStraight)
+        else if(isStraight && isFlush)
+        {
+            hand = "Straight Flush";
+        }
+        else if(hasFourOfAKind)
+        {
+            hand = "Four Of A Kind";
+        }
+        else if((hasThreeOfAKind)&&(numberOfPairs == 1))
+        {
+            hand = "Full House";
+        }
+        else if(isFlush)
+        {
+            hand = "Flush";
+        }
+        else if((isStraight)||(isRoyalStraight))
         {
             hand = "Straight";
         }
@@ -81,6 +99,10 @@ public class PokerHandChecker
             {
                 isStraight = true;
             }
+            else if((count > 3)&&(arr[0]==1)&&(arr[arr.length-1]==13))
+            {
+                isRoyalStraight = true;
+            }
         }
     }
 
@@ -93,19 +115,24 @@ public class PokerHandChecker
     {
         for (String card : cards)
         {
-            populateCardRankMap(card);
-            populateCardSuitMap(card);
+            sumCardRanksIntoMap(card);
+            sumCardSuitsIntoMap(card);
         }
     }
 
     /**
      * This checks card ranks for levels of aggregation ie. pairs, three of a kind or four of a kind
      */
-    private void checkAggregatedValuesOfRanks()
+    private void checkSummedValuesOfRanks()
     {
         Collection<Integer> rankCollection = numberOfCardRanks.values();
         for (Integer countOfRank : rankCollection)
         {
+            if (countOfRank == 4)
+            {
+                hasFourOfAKind = true;
+            }
+            else
             if (countOfRank == 3)
             {
                 hasThreeOfAKind = true;
@@ -117,13 +144,13 @@ public class PokerHandChecker
         }
     }
 
-    private void populateCardSuitMap(String card)
+    private void sumCardSuitsIntoMap(String card)
     {
         String cardSuit = card.substring(card.length()-1, card.length()).toUpperCase();
         numberOfCardSuits.compute(cardSuit, (key, value) -> value == null ? 1 : value + 1);
     }
 
-    private void populateCardRankMap(String card)
+    private void sumCardRanksIntoMap(String card)
     {
         int cardRankValue = getCardRankValue(card);
         numberOfCardRanks.compute(cardRankValue, (key, value) -> value == null ? 1 : value + 1);
