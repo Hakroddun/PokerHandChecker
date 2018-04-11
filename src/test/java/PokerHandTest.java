@@ -86,4 +86,16 @@ public class PokerHandTest
         assertEquals("Straight",ch.BestHand());
     }
 
+    @Test
+    public void Flush()
+    {
+        cards[0]="AS";
+        cards[1]="5S";
+        cards[2]="7S";
+        cards[3]="8S";
+        cards[4]="JS";
+        ch.checkHand(cards);
+        assertEquals("Straight",ch.BestHand());
+    }
+
 }

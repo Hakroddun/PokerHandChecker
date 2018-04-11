@@ -30,8 +30,13 @@ public class PokerHandChecker
         sortCardsIntoRankAndSuitMaps(cards);
         checkAggregatedValuesOfRanks();
         checkIfStraight();
+        checkIfFlush();
 
-        if(isStraight)
+        if(isFlush)
+        {
+            hand = "Straight";
+        }
+        else if(isStraight)
         {
             hand = "Straight";
         }
@@ -48,6 +53,14 @@ public class PokerHandChecker
             hand = "Pair";
         }
 
+    }
+
+    private void checkIfFlush()
+    {
+        if(numberOfCardSuits.containsValue(5))
+        {
+            isFlush = true;
+        }
     }
 
     private void checkIfStraight()
@@ -106,7 +119,7 @@ public class PokerHandChecker
 
     private void populateCardSuitMap(String card)
     {
-        String cardSuit = card.substring(card.length()-1, card.length());
+        String cardSuit = card.substring(card.length()-1, card.length()).toUpperCase();
         numberOfCardSuits.compute(cardSuit, (key, value) -> value == null ? 1 : value + 1);
     }
 
@@ -116,29 +129,27 @@ public class PokerHandChecker
         numberOfCardRanks.compute(cardRankValue, (key, value) -> value == null ? 1 : value + 1);
     }
 
+    /**
+     * Retrieves the rank value of a card from 1 to 13 and replaces characters with integers.
+     * @param card - The card to assign a rank value to.
+     * @return - The value assigned to the card rank
+     */
     private int getCardRankValue(String card)
     {
-        int cardRankValue;
         String cardRank = card.substring(0, card.length()-1).toUpperCase();
         switch (cardRank)
         {
             case "A":
-                cardRankValue = 1;
-                break;
+                return 1;
             case "J":
-                cardRankValue = 11;
-                break;
+                return 11;
             case "Q":
-                cardRankValue = 12;
-                break;
+                return 12;
             case "K":
-                cardRankValue = 13;
-                break;
+                return 13;
             default:
-                cardRankValue = Integer.parseInt(cardRank);
-                break;
+                return Integer.parseInt(cardRank);
         }
-        return cardRankValue;
     }
 
 }
