@@ -1,10 +1,16 @@
 import java.util.Collection;
-import java.util.HashMap;
 import java.util.Map;
+import java.util.TreeMap;
 
 public class PokerHandChecker
 {
     private String hand = "High Card";
+    private boolean isStraight = false;
+    private boolean isFlush = false;
+    private boolean hasThreeOfAKind = false;
+    private int numberOfPairs = 0;
+    private Map<Integer, Integer> numberOfCardRanks = new TreeMap<>();
+    private Map<String, Integer> numberOfCardSuits = new TreeMap<>();
 
     /**
      * This method is used to return the best hand possible from the cards given.
@@ -21,61 +27,118 @@ public class PokerHandChecker
      */
     public void checkHand(String[] cards)
     {
-        Boolean isStraight = false;
-        Boolean isFlush = false;
-        Map<String, Integer> numberOfCardRanks = new HashMap<String, Integer>();
-        Map<String, Integer> numberOfCardSuits = new HashMap<String, Integer>();
-        for (String card : cards)
-        {
-            populateCardRankMap(card, numberOfCardRanks);
-            populateCardSuitMap(card, numberOfCardSuits);
-        }
+        sortCardsIntoRankAndSuitMaps(cards);
+        checkAggregatedValuesOfRanks();
+        checkIfStraight();
 
-        Collection<Integer> rankCollection = numberOfCardRanks.values();
-        int numberOfPairs = 0;
-        for (Integer countOfRank : rankCollection)
+        if(isStraight)
         {
-            if(countOfRank == 2)
-            {
-                numberOfPairs++;
-            }
+            hand = "Straight";
         }
-        if(numberOfPairs == 2)
+        else if(hasThreeOfAKind)
         {
-            System.out.println();
+            hand = "Three Of A Kind";
+        }
+        else if(numberOfPairs == 2)
+        {
             hand = "Two Pair";
         }
         else if(numberOfPairs == 1)
         {
-            System.out.println();
             hand = "Pair";
         }
 
     }
 
-    private void populateCardSuitMap(String card, Map<String, Integer> numberOfCardSuits)
+    private void checkIfStraight()
+    {
+        Integer[] arr = numberOfCardRanks.keySet().toArray(new Integer[numberOfCardRanks.size()]);
+        int count = 1;
+        for(int i=0; i<arr.length-1; i++)
+        {
+            if((arr[i+1]-1) == arr[i])
+            {
+                count++;
+            }
+            else
+            {
+                count=1;
+            }
+            if(count == arr.length)
+            {
+                isStraight = true;
+            }
+        }
+    }
+
+    /**
+     * Sorts the cards according to suit and rank into two hashmaps.
+     * These hashmaps are used to to extract aggregate values for processing.
+     * @param cards - String array filled with the details of 5 cards.
+     */
+    private void sortCardsIntoRankAndSuitMaps(String[] cards)
+    {
+        for (String card : cards)
+        {
+            populateCardRankMap(card);
+            populateCardSuitMap(card);
+        }
+    }
+
+    /**
+     * This checks card ranks for levels of aggregation ie. pairs, three of a kind or four of a kind
+     */
+    private void checkAggregatedValuesOfRanks()
+    {
+        Collection<Integer> rankCollection = numberOfCardRanks.values();
+        for (Integer countOfRank : rankCollection)
+        {
+            if (countOfRank == 3)
+            {
+                hasThreeOfAKind = true;
+            }
+            else if(countOfRank == 2)
+            {
+                numberOfPairs++;
+            }
+        }
+    }
+
+    private void populateCardSuitMap(String card)
     {
         String cardSuit = card.substring(card.length()-1, card.length());
-        populateCardMap(numberOfCardSuits, cardSuit);
+        numberOfCardSuits.compute(cardSuit, (key, value) -> value == null ? 1 : value + 1);
     }
 
-    private void populateCardRankMap(String card, Map<String, Integer> numberOfCardRanks)
+    private void populateCardRankMap(String card)
     {
-        String cardRank = card.substring(0, card.length()-1);
-        populateCardMap(numberOfCardRanks, cardRank);
+        int cardRankValue = getCardRankValue(card);
+        numberOfCardRanks.compute(cardRankValue, (key, value) -> value == null ? 1 : value + 1);
     }
 
-    private void populateCardMap(Map<String, Integer> numberOfCard, String keyToCount)
+    private int getCardRankValue(String card)
     {
-        if(numberOfCard.containsKey(keyToCount))
+        int cardRankValue;
+        String cardRank = card.substring(0, card.length()-1).toUpperCase();
+        switch (cardRank)
         {
-            int count = numberOfCard.get(keyToCount);
-            numberOfCard.put(keyToCount,++count);
+            case "A":
+                cardRankValue = 1;
+                break;
+            case "J":
+                cardRankValue = 11;
+                break;
+            case "Q":
+                cardRankValue = 12;
+                break;
+            case "K":
+                cardRankValue = 13;
+                break;
+            default:
+                cardRankValue = Integer.parseInt(cardRank);
+                break;
         }
-        else
-        {
-            numberOfCard.put(keyToCount,1);
-        }
+        return cardRankValue;
     }
 
 }
