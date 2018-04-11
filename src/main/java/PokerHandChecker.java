@@ -1,3 +1,4 @@
+import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -29,8 +30,24 @@ public class PokerHandChecker
             populateCardRankMap(card, numberOfCardRanks);
             populateCardSuitMap(card, numberOfCardSuits);
         }
-        if(numberOfCardRanks.containsValue(2))
+
+        Collection<Integer> rankCollection = numberOfCardRanks.values();
+        int numberOfPairs = 0;
+        for (Integer countOfRank : rankCollection)
         {
+            if(countOfRank == 2)
+            {
+                numberOfPairs++;
+            }
+        }
+        if(numberOfPairs == 2)
+        {
+            System.out.println();
+            hand = "Two Pair";
+        }
+        else if(numberOfPairs == 1)
+        {
+            System.out.println();
             hand = "Pair";
         }
 
