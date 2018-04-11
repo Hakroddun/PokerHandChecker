@@ -33,7 +33,14 @@ public class PokerHandChecker
         checkSummedValuesOfRanks();
         checkIfStraight();
         checkIfFlush();
+        calculateHand();
+    }
 
+    /**
+     * Sets the hand value to the highest hand possible with the cards supplied.
+     */
+    private void calculateHand()
+    {
         if(isRoyalStraight && isFlush)
         {
             hand = "Royal Flush";
@@ -70,9 +77,11 @@ public class PokerHandChecker
         {
             hand = "Pair";
         }
-
     }
 
+    /**
+     * Checks for 5 cards of a specific suit.
+     */
     private void checkIfFlush()
     {
         if(numberOfCardSuits.containsValue(5))
@@ -81,6 +90,9 @@ public class PokerHandChecker
         }
     }
 
+    /**
+     * Checks for 5 cards of a that follow on each other.
+     */
     private void checkIfStraight()
     {
         Integer[] arr = numberOfCardRanks.keySet().toArray(new Integer[numberOfCardRanks.size()]);
@@ -95,14 +107,14 @@ public class PokerHandChecker
             {
                 count=1;
             }
-            if(count == arr.length)
-            {
-                isStraight = true;
-            }
-            else if((count > 3)&&(arr[0]==1)&&(arr[arr.length-1]==13))
-            {
-                isRoyalStraight = true;
-            }
+        }
+        if(count == 5)
+        {
+            isStraight = true;
+        }
+        else if((count > 3)&&(arr[0]==1)&&(arr[arr.length-1]==13))
+        {
+            isRoyalStraight = true;
         }
     }
 

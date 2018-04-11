@@ -5,13 +5,13 @@ import static org.junit.Assert.assertEquals;
 
 public class PokerHandTest
 {
-    private PokerHandChecker ch;
+    private PokerHandChecker checker;
     private String[] cards;
 
     @Before
     public void setUp()
     {
-        ch = new PokerHandChecker();
+        checker = new PokerHandChecker();
         cards = new String[5];
     }
 
@@ -23,7 +23,7 @@ public class PokerHandTest
         cards[2]="10H";
         cards[3]="6C";
         cards[4]="8S";
-        ch.checkHand(cards);
+        checker.checkHand(cards);
     }
 
     @Test
@@ -34,8 +34,8 @@ public class PokerHandTest
         cards[2]="10H";
         cards[3]="6C";
         cards[4]="8S";
-        ch.checkHand(cards);
-        assertEquals("High Card",ch.getHand());
+        checker.checkHand(cards);
+        assertEquals("High Card", checker.getHand());
     }
 
     @Test
@@ -46,8 +46,8 @@ public class PokerHandTest
         cards[2]="3H";
         cards[3]="6C";
         cards[4]="8S";
-        ch.checkHand(cards);
-        assertEquals("Pair",ch.getHand());
+        checker.checkHand(cards);
+        assertEquals("Pair", checker.getHand());
     }
 
     @Test
@@ -58,8 +58,8 @@ public class PokerHandTest
         cards[2]="3H";
         cards[3]="3C";
         cards[4]="8S";
-        ch.checkHand(cards);
-        assertEquals("Two Pair",ch.getHand());
+        checker.checkHand(cards);
+        assertEquals("Two Pair", checker.getHand());
     }
 
     @Test
@@ -70,8 +70,8 @@ public class PokerHandTest
         cards[2]="AH";
         cards[3]="3C";
         cards[4]="8S";
-        ch.checkHand(cards);
-        assertEquals("Three Of A Kind",ch.getHand());
+        checker.checkHand(cards);
+        assertEquals("Three Of A Kind", checker.getHand());
     }
 
     @Test
@@ -82,8 +82,8 @@ public class PokerHandTest
         cards[2]="3H";
         cards[3]="4C";
         cards[4]="5S";
-        ch.checkHand(cards);
-        assertEquals("Straight",ch.getHand());
+        checker.checkHand(cards);
+        assertEquals("Straight", checker.getHand());
     }
 
     @Test
@@ -94,8 +94,8 @@ public class PokerHandTest
         cards[2]="QH";
         cards[3]="JC";
         cards[4]="KS";
-        ch.checkHand(cards);
-        assertEquals("Straight",ch.getHand());
+        checker.checkHand(cards);
+        assertEquals("Straight", checker.getHand());
     }
 
     @Test
@@ -106,8 +106,8 @@ public class PokerHandTest
         cards[2]="7S";
         cards[3]="8S";
         cards[4]="JS";
-        ch.checkHand(cards);
-        assertEquals("Flush",ch.getHand());
+        checker.checkHand(cards);
+        assertEquals("Flush", checker.getHand());
     }
 
     @Test
@@ -118,8 +118,8 @@ public class PokerHandTest
         cards[2]="AH";
         cards[3]="3C";
         cards[4]="3S";
-        ch.checkHand(cards);
-        assertEquals("Full House",ch.getHand());
+        checker.checkHand(cards);
+        assertEquals("Full House", checker.getHand());
     }
 
     @Test
@@ -130,8 +130,8 @@ public class PokerHandTest
         cards[2]="AH";
         cards[3]="AD";
         cards[4]="8S";
-        ch.checkHand(cards);
-        assertEquals("Four Of A Kind",ch.getHand());
+        checker.checkHand(cards);
+        assertEquals("Four Of A Kind", checker.getHand());
     }
 
     @Test
@@ -142,8 +142,8 @@ public class PokerHandTest
         cards[2]="3S";
         cards[3]="4S";
         cards[4]="5S";
-        ch.checkHand(cards);
-        assertEquals("Straight Flush",ch.getHand());
+        checker.checkHand(cards);
+        assertEquals("Straight Flush", checker.getHand());
     }
 
     @Test
@@ -154,8 +154,8 @@ public class PokerHandTest
         cards[2]="JS";
         cards[3]="KS";
         cards[4]="10S";
-        ch.checkHand(cards);
-        assertEquals("Royal Flush",ch.getHand());
+        checker.checkHand(cards);
+        assertEquals("Royal Flush", checker.getHand());
     }
 
 }
