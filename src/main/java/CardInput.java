@@ -11,5 +11,6 @@ public class CardInput
         String[]cards = scanner.nextLine().replaceAll("\\s*","").split(",");
         checker.checkHand(cards);
         System.out.println(checker.getHand());
+        String value = "";
     }
 }

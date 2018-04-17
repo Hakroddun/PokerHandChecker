@@ -26,7 +26,7 @@
                     </descriptorRefs>
                     <archive>
                         <manifest>
-                            <mainClass>Tracker</mainClass>
+                            <mainClass>CardInput</mainClass>
                         </manifest>
                     </archive>
                 </configuration>
